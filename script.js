@@ -56,8 +56,16 @@ document.getElementById("generatePrompt").addEventListener("click", function () 
     evaluationResults.textContent = "Your evaluation results will appear here.";
 });
 
-// Render sanitized Markdown responses
+
+
+ // Render sanitized Markdown responses safely
 function renderResponse(element, text) {
+    if (typeof text !== "string" || !text.trim()) {
+        element.textContent =
+            "AI response is unavailable. Please try again.";
+        return;
+    }
+
     const cleanedText = text
         .replace(/\r\n/g, "\n")
         .replace(/\n[ \t]*\n(?:[ \t]*\n)+/g, "\n\n")
@@ -67,6 +75,7 @@ function renderResponse(element, text) {
         marked.parse(cleanedText)
     );
 }
+
 
 // STEP 2: Compare Responses using Groq API
 compareResponsesBtn.addEventListener("click", async function () {
